@@ -39,3 +39,11 @@ resource "aws_route" "spoke_to_hub" {
 variable "transit_gateway_id" {
   type = string
 }
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}

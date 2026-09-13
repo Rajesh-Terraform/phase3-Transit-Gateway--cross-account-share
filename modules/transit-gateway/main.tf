@@ -1,4 +1,4 @@
-resource "aws_ec2_transit_gateway" "this" {
+resource "aws_ec2_transit_gateway" "this" { 
   description = var.name
 
   default_route_table_association = "disable"
@@ -24,5 +24,13 @@ resource "aws_ec2_transit_gateway_route_table" "spoke" {
 
   tags = {
     Name = "phase3-tgw-spoke-route-table"
+  }
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
   }
 }

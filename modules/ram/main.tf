@@ -17,3 +17,12 @@ resource "aws_ram_principal_association" "spoke" {
   principal          = var.spoke_account_id
   resource_share_arn = aws_ram_resource_share.this.arn
 }
+
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}

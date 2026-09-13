@@ -12,3 +12,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "this" {
     Name = "phase3-spoke-tgw-attachment"
   }
 }
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
