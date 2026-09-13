@@ -32,3 +32,17 @@ provider "aws" {
     role_arn = var.spoke_role_arn
   }
 }
+
+provider "aws" {
+  alias  = "hub"
+  region = var.aws_region
+
+  assume_role {
+    role_arn = var.hub_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "spoke"
+  region = var.aws_region
+}
