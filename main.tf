@@ -1,12 +1,10 @@
-
-
-
 module "transit_gateway" {
   source = "./modules/transit-gateway"
 
   providers = {
     aws = aws.hub
   }
+
   name = "phase3-transit-gateway"
 }
 
@@ -17,7 +15,7 @@ module "ram" {
     aws = aws.hub
   }
 
-  transit_gateway_arn = module.transit_gateway.transit_gateway_id
+  transit_gateway_arn = module.transit_gateway.transit_gateway_arn
   spoke_account_id    = var.spoke_account_id
 }
 
@@ -65,16 +63,4 @@ module "routing" {
 
   hub_route_table_ids   = var.hub_route_table_ids
   spoke_route_table_ids = var.spoke_route_table_ids
-}
-
-
-module "ram" {
-  source = "./modules/ram"
-
-  providers = {
-    aws = aws.hub
-  }
-
-  transit_gateway_arn = module.transit_gateway.transit_gateway_arn
-  spoke_account_id    = var.spoke_account_id
-}
+}  
