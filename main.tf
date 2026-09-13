@@ -64,3 +64,63 @@ module "routing" {
   hub_route_table_ids   = var.hub_route_table_ids
   spoke_route_table_ids = var.spoke_route_table_ids
 }  
+
+
+
+
+terraform {
+  required_version = ">= 1.6.0"
+
+  backend "s3" {
+    bucket = "phase3-transit-gateway-terraform-state-434097521299"
+    key    = "phase3/terraform.tfstate"
+    region = "ap-south-1"
+  }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  alias  = "hub"
+  region = var.aws_region
+
+  assume_role {
+    role_arn = var.hub_role_arn
+  }
+}
+
+provider "aws" {
+  alias  = "spoke"
+  region = var.aws_region
+}
+
+
+
+
+module "routing" {
+  source = "./modules/routing"
+
+  providers = {
+    aws.hub   = aws.hub
+    aws.spoke = aws.spoke
+  }
+
+  hub_tgw_route_table_id   = module.transit_gateway.hub_route_table_id
+  spoke_tgw_route_table_id = module.transit_gateway.spoke_route_table_id
+
+  hub_attachment_id   = module.hub_attachment.attachment_id
+  spoke_attachment_id = module.spoke_attachment.attachment_id
+
+  transit_gateway_id = module.transit_gateway.transit_gateway_id
+
+  hub_vpc_cidr   = var.hub_vpc_cidr
+  spoke_vpc_cidr = var.spoke_vpc_cidr
+
+  hub_route_table_ids   = var.hub_route_table_ids
+  spoke_route_table_ids = var.spoke_route_table_ids
+}
