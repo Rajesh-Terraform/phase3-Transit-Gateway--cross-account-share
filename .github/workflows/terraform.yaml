@@ -1,3 +1,4 @@
+
 name: phase3-transit-gateway
 
 on:
@@ -25,14 +26,14 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::647132523867:role/github-actions-terraform-role-v1
+          role-to-assume: arn:aws:iam::434097521299:role/github-actions-terraform-role-v1
           aws-region: ap-south-1
 
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Format
-        run: terraform fmt 
+        run: terraform 
 
       - name: Terraform Validate
         run: terraform validate
@@ -40,5 +41,6 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
-      - name: Terraform Apply  
-        run: terraform apply -auto-approve      
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
