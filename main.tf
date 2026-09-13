@@ -101,26 +101,3 @@ provider "aws" {
 
 
 
-
-module "routing" {
-  source = "./modules/routing"
-
-  providers = {
-    aws.hub   = aws.hub
-    aws.spoke = aws.spoke
-  }
-
-  hub_tgw_route_table_id   = module.transit_gateway.hub_route_table_id
-  spoke_tgw_route_table_id = module.transit_gateway.spoke_route_table_id
-
-  hub_attachment_id   = module.hub_attachment.attachment_id
-  spoke_attachment_id = module.spoke_attachment.attachment_id
-
-  transit_gateway_id = module.transit_gateway.transit_gateway_id
-
-  hub_vpc_cidr   = var.hub_vpc_cidr
-  spoke_vpc_cidr = var.spoke_vpc_cidr
-
-  hub_route_table_ids   = var.hub_route_table_ids
-  spoke_route_table_ids = var.spoke_route_table_ids
-}
