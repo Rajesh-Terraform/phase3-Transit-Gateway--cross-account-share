@@ -39,4 +39,4 @@ variable "spoke_state_bucket" {
 variable "tags" {
   type    = map(string)
   default = {}
-}
+}   

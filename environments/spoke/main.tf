@@ -24,5 +24,5 @@ module "spoke_routes_to_hub" {
   depends_on = [
     module.spoke_attachment
   ]
-}
+}  
   
