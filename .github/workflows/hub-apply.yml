@@ -33,7 +33,7 @@ jobs:
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::647132523867:role/github-actions-terraform-role-v1 
+          role-to-assume: arn:aws:iam::647132523867:role/github-actions-terraform-role-v1
           aws-region: ap-south-1
 
       - name: Terraform Setup
@@ -43,4 +43,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve    
+        run: terraform apply -auto-approve      
