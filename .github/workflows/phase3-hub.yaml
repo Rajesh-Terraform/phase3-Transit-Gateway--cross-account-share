@@ -1,9 +1,13 @@
-name: Phase 3 - Hub VPC Apply
+name: Phase 3 - Hub Apply
 
 on:
   push:
     branches:
       - main
+    paths:
+      - "terraform/phase3-hub/**"
+      - "terraform/modules/**"
+      - ".github/workflows/phase3-hub.yaml"
 
   workflow_dispatch:
 
@@ -12,13 +16,13 @@ permissions:
   contents: read
 
 jobs:
-  phase1-hub:
-    name: Phase 1 - Hub VPC Apply
+  phase3-hub:
+    name: Phase 3 - Hub
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: terraform/phase1-hub
+        working-directory: terraform/phase3-hub
 
     steps:
       - name: Checkout
@@ -27,7 +31,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::647132523867:role/github-actions-terraform-role-v1 
+          role-to-assume: arn:aws:iam::647132523867:role/github-actions-terraform-role-v1
           aws-region: ap-south-1
 
       - name: Setup Terraform
@@ -43,4 +47,4 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve 
+        run: terraform apply -auto-approve   
