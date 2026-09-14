@@ -14,7 +14,7 @@ variable "subnet_ids" {
 }
 
 variable "name" {
-  description = "Spoke attachment name"
+  description = "Spoke TGW attachment name"
   type        = string
 }
 
