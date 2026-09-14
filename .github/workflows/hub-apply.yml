@@ -8,6 +8,8 @@ on:
       - "environments/hub/**"
       - "modules/**"
 
+  workflow_dispatch:
+
 permissions:
   id-token: write
   contents: read
@@ -35,6 +37,9 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::647132523867:role/github-actions-terraform-role-v1
           aws-region: ap-south-1
+
+      - name: Check AWS Identity
+        run: aws sts get-caller-identity
 
       - name: Terraform Setup
         uses: hashicorp/setup-terraform@v3
