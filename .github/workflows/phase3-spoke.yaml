@@ -1,9 +1,13 @@
-name: Phase 3 - Spoke VPC Apply
+name: Phase 3 - Spoke Apply
 
 on:
   push:
     branches:
       - main
+    paths:
+      - "terraform/phase3-spoke/**"
+      - "terraform/modules/**"
+      - ".github/workflows/phase3-spoke.yaml"
 
   workflow_dispatch:
 
@@ -12,13 +16,13 @@ permissions:
   contents: read
 
 jobs:
-  phase2-spoke:
-    name: Phase 2 - Spoke VPC Apply
+  phase3-spoke:
+    name: Phase 3 - Spoke Attachment
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: terraform/phase2-spoke
+        working-directory: terraform/phase3-spoke
 
     steps:
       - name: Checkout
@@ -43,4 +47,4 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve  
