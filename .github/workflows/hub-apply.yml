@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "environments/hub/**"
-      - "modules/**"
+      - "modules/**" 
 
 permissions:
   id-token: write
@@ -43,5 +43,5 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve      
+        run: terraform apply -auto-approve        
   
