@@ -1,10 +1,18 @@
-module "spoke_attachment" {
+module "spoke" {
   source = "../modules/spoke"
 
-  transit_gateway_id = var.transit_gateway_id
-  vpc_id             = var.spoke_vpc_id
-  subnet_ids         = var.spoke_subnet_ids
-  name               = var.attachment_name
+  vpc_cidr             = var.vpc_cidr
+  vpc_name             = var.vpc_name
+  private_subnet_cidrs = var.private_subnet_cidrs
+  availability_zones   = var.availability_zones
+}
 
-  tags = var.tags
-}  
+module "spoke_attachment" {
+  source = "../modules/attachement"
+
+  transit_gateway_id = var.transit_gateway_id
+  vpc_id             = module.spoke.vpc_id
+  subnet_ids         = module.spoke.private_subnet_ids
+  name               = var.attachment_name
+  tags               = var.tags
+}

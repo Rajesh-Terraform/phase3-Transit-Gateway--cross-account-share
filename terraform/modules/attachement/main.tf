@@ -3,16 +3,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "this" {
   vpc_id             = var.vpc_id
   subnet_ids         = var.subnet_ids
 
-  dns_support  = "enable"
-  ipv6_support = "disable"
-
-  transit_gateway_default_route_table_association = true
-  transit_gateway_default_route_table_propagation = true
-
   tags = merge(
     var.tags,
     {
       Name = var.name
     }
   )
-}
+}  

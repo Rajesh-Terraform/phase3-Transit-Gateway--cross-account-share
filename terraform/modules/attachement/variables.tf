@@ -1,20 +1,25 @@
 variable "transit_gateway_id" {
-  type = string
+  description = "Transit Gateway ID"
+  type        = string
 }
 
 variable "vpc_id" {
-  type = string
+  description = "VPC ID to attach to Transit Gateway"
+  type        = string
 }
 
 variable "subnet_ids" {
-  type = list(string)
+  description = "Subnet IDs for Transit Gateway attachment"
+  type        = list(string)
 }
 
 variable "name" {
-  type = string
+  description = "TGW attachment name"
+  type        = string
 }
 
 variable "tags" {
-  type    = map(string)
-  default = {}
-}      
+  description = "Additional tags"
+  type        = map(string)
+  default     = {}
+}  

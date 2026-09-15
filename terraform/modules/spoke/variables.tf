@@ -1,19 +1,19 @@
 variable "vpc_cidr" {
-  description = "CIDR block for the Spoke VPC"
+  description = "Spoke VPC CIDR"
   type        = string
 }
 
 variable "vpc_name" {
-  description = "Name of the Spoke VPC"
+  description = "Spoke VPC name"
   type        = string
 }
 
 variable "private_subnet_cidrs" {
-  description = "CIDR blocks for the Spoke private subnets"
+  description = "Spoke private subnet CIDRs"
   type        = list(string)
 }
 
 variable "availability_zones" {
-  description = "Availability zones for the Spoke private subnets"
+  description = "Availability zones"
   type        = list(string)
-}  
+} 
