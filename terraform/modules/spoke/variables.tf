@@ -1,25 +1,19 @@
-variable "transit_gateway_id" {
-  description = "Transit Gateway ID"
+variable "vpc_cidr" {
+  description = "CIDR block for the Spoke VPC"
   type        = string
 }
 
-variable "vpc_id" {
-  description = "Spoke VPC ID"
+variable "vpc_name" {
+  description = "Name of the Spoke VPC"
   type        = string
 }
 
-variable "subnet_ids" {
-  description = "Spoke private subnet IDs"
+variable "private_subnet_cidrs" {
+  description = "CIDR blocks for the Spoke private subnets"
   type        = list(string)
 }
 
-variable "name" {
-  description = "Spoke TGW attachment name"
-  type        = string
-}
-
-variable "tags" {
-  description = "Tags"
-  type        = map(string)
-  default     = {}
-}       
+variable "availability_zones" {
+  description = "Availability zones for the Spoke private subnets"
+  type        = list(string)
+}  
