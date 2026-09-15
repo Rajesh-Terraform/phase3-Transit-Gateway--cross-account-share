@@ -4,4 +4,4 @@ output "attachment_id" {
 
 output "attachment_state" {
   value = aws_ec2_transit_gateway_vpc_attachment.this.state
-}        
+}          
