@@ -6,4 +6,4 @@ output "vpc_id" {
 output "private_subnet_ids" {
   description = "Spoke private subnet IDs"
   value       = aws_subnet.private[*].id
-}  
+}
