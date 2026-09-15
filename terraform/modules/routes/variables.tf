@@ -9,4 +9,4 @@ variable "routes" {
     route_table_id  = string
     destination_cidr = string
   }))
-}
+}   
