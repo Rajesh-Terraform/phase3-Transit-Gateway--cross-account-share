@@ -1,4 +1,4 @@
-output "spoke_attachment_id" {
-  description = "Spoke Transit Gateway VPC attachment ID"
-  value       = module.spoke_attachment.attachment_id
+output "attachment_id" {
+  description = "Transit Gateway VPC attachment ID"
+  value       = aws_ec2_transit_gateway_vpc_attachment.this.id
 }  

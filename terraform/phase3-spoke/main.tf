@@ -7,4 +7,4 @@ module "spoke_attachment" {
   name               = var.attachment_name
 
   tags = var.tags
-}
+}  

@@ -11,4 +11,4 @@ output "resource_share_arn" {
 output "transit_gateway_id" {
   description = "Transit Gateway ID"
   value       = var.transit_gateway_id
-}
+}  
