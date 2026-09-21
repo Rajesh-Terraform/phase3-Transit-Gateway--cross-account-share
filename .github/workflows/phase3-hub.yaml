@@ -35,7 +35,17 @@ jobs:
           aws-region: ap-south-1
 
       - name: Verify AWS Identity
-        run: aws sts get-caller-identity
+        run: |
+          aws sts get-caller-identity
+          aws ec2 describe-vpcs --region ap-south-1
+
+      - name: Check Terraform State Bucket
+        run: |
+          aws s3api head-bucket \
+            --bucket rajesh-terraform-state-878962827886
+
+          aws s3 ls \
+            s3://rajesh-terraform-state-878962827886
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -43,13 +53,13 @@ jobs:
           terraform_version: 1.13.3
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -reconfigure
 
       - name: Terraform Validate
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -input=false
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan 
+        run: terraform apply -auto-approve tfplan  
