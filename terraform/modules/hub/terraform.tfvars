@@ -1,1 +1,0 @@
- spoke_account_id = "YOUR-SPOKE-ACCOUNT-ID" 

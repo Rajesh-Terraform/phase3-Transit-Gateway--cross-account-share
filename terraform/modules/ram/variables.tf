@@ -4,6 +4,6 @@ variable "transit_gateway_id" {
 }
 
 variable "spoke_account_id" {
-  description = "Spoke AWS account ID"
+  description = "AWS account ID of the Spoke account"
   type        = string
 }  
