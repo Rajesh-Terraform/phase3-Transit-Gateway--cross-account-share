@@ -25,6 +25,7 @@ jobs:
         working-directory: terraform/phase3-spoke
 
     steps:
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -33,6 +34,9 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::434097521299:role/testingdummy
           aws-region: ap-south-1
+
+      - name: Check AWS Identity
+        run: aws sts get-caller-identity
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -44,8 +48,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve        
-
+        run: terraform apply -auto-approve -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"  

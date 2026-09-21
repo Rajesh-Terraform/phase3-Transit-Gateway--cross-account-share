@@ -1,3 +1,4 @@
+ 
 name: Phase 3 - TGW Apply
 
 on:
@@ -43,5 +44,6 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve    
+        run: terraform apply -auto-approve  
+
 

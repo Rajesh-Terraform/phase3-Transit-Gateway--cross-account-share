@@ -13,4 +13,4 @@ resource "aws_ram_resource_association" "this" {
 resource "aws_ram_principal_association" "this" {
   principal          = var.spoke_account_id
   resource_share_arn = aws_ram_resource_share.this.arn
-}
+}  
