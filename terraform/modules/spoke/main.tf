@@ -1,21 +1,9 @@
-resource "aws_vpc" "this" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+module "spoke_attachment" {
+  source = "../modules/attachement"
 
-  tags = {
-    Name = var.vpc_name
-  }
-}
+  transit_gateway_id = var.transit_gateway_id
 
-resource "aws_subnet" "private" {
-  count = length(var.private_subnet_cidrs)
+  vpc_id = module.spoke_vpc.vpc_id
 
-  vpc_id            = aws_vpc.this.id
-  cidr_block        = var.private_subnet_cidrs[count.index]
-  availability_zone = var.availability_zones[count.index]
-
-  tags = {
-    Name = "${var.vpc_name}-private-${count.index + 1}"
-  }
+  subnet_ids = module.spoke_vpc.private_subnet_ids
 } 

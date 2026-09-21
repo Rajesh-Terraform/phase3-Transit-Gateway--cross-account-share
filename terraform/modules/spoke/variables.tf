@@ -1,19 +1,4 @@
-variable "vpc_cidr" {
-  description = "Spoke VPC CIDR"
+variable "transit_gateway_id" {
+  description = "Transit Gateway ID from Hub account"
   type        = string
-}
-
-variable "vpc_name" {
-  description = "Spoke VPC name"
-  type        = string
-}
-
-variable "private_subnet_cidrs" {
-  description = "Spoke private subnet CIDRs"
-  type        = list(string)
-}
-
-variable "availability_zones" {
-  description = "Availability zones"
-  type        = list(string)
 } 

@@ -38,6 +38,14 @@ jobs:
       - name: Check AWS Identity
         run: aws sts get-caller-identity
 
+      - name: Check Transit Gateway ID
+        run: |
+          if [ -z "${{ vars.TRANSIT_GATEWAY_ID }}" ]; then
+            echo "ERROR: TRANSIT_GATEWAY_ID GitHub variable is empty or missing"
+            exit 1
+          fi
+          echo "TRANSIT_GATEWAY_ID is configured"
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -48,7 +56,14 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"
+        run: |
+          terraform plan \
+            -input=false \
+            -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"  
+        run: |
+          terraform apply \
+            -input=false \
+            -auto-approve \
+            -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"  
