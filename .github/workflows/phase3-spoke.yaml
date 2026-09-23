@@ -29,41 +29,63 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ------------------------------------
+      # AWS OIDC
+      # ------------------------------------
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::434097521299:role/testingdummy
           aws-region: ap-south-1
 
+      # ------------------------------------
+      # Verify AWS
+      # ------------------------------------
       - name: Check AWS Identity
-        run: aws sts get-caller-identity
-
-      - name: Check Transit Gateway ID
         run: |
-          if [ -z "${{ vars.TRANSIT_GATEWAY_ID }}" ]; then
+          aws sts get-caller-identity
+
+      # ------------------------------------
+      # Check TGW Variable
+      # ------------------------------------
+      - name: Check Transit Gateway ID
+        env:
+          TRANSIT_GATEWAY_ID: ${{ vars.TRANSIT_GATEWAY_ID }}
+        run: |
+          if [ -z "$TRANSIT_GATEWAY_ID" ]; then
             echo "ERROR: TRANSIT_GATEWAY_ID GitHub variable is empty or missing"
             exit 1
           fi
+
           echo "TRANSIT_GATEWAY_ID is configured"
 
+      # ------------------------------------
+      # Terraform
+      # ------------------------------------
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.3
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -input=false
 
       - name: Terraform Validate
         run: terraform validate
 
       - name: Terraform Plan
+        env:
+          TF_VAR_transit_gateway_id: ${{ vars.TRANSIT_GATEWAY_ID }}
         run: |
           terraform plan \
             -input=false \
-            -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"
+            -out=tfplan
 
       - name: Terraform Apply
+        env:
+          TF_VAR_transit_gateway_id: ${{ vars.TRANSIT_GATEWAY_ID }}
         run: |
           terraform apply \
             -input=false \
             -auto-approve \
-            -var="transit_gateway_id=${{ vars.TRANSIT_GATEWAY_ID }}"    
+            tfplan      
