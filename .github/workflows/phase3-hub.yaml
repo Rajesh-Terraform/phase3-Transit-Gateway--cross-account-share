@@ -26,29 +26,31 @@ jobs:
 
     steps:
 
+      # --------------------------------
+      # Checkout
+      # --------------------------------
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ------------------------------------------------
+      # --------------------------------
       # AWS OIDC
-      # ------------------------------------------------
+      # --------------------------------
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::878962827886:role/Rajesh-devops
           aws-region: ap-south-1
 
-      # ------------------------------------------------
-      # Verify AWS
-      # ------------------------------------------------
+      # --------------------------------
+      # Verify AWS Account
+      # --------------------------------
       - name: Verify AWS Identity
         run: |
           aws sts get-caller-identity
-          aws ec2 describe-vpcs --region ap-south-1
 
-      # ------------------------------------------------
+      # --------------------------------
       # Check Terraform State Bucket
-      # ------------------------------------------------
+      # --------------------------------
       - name: Check Terraform State Bucket
         run: |
           aws s3api head-bucket \
@@ -57,50 +59,69 @@ jobs:
           aws s3 ls \
             s3://rajesh-terraform-state-878962827886
 
-      # ------------------------------------------------
+      # --------------------------------
       # Check Required Variables
-      # ------------------------------------------------
+      # --------------------------------
       - name: Check Required Variables
         env:
           TRANSIT_GATEWAY_ID: ${{ vars.TRANSIT_GATEWAY_ID }}
           SPOKE_ACCOUNT_ID: ${{ vars.SPOKE_ACCOUNT_ID }}
         run: |
           if [ -z "$TRANSIT_GATEWAY_ID" ]; then
-            echo "ERROR: TRANSIT_GATEWAY_ID GitHub variable is missing"
+            echo "ERROR: TRANSIT_GATEWAY_ID GitHub repository variable is missing"
             exit 1
           fi
 
           if [ -z "$SPOKE_ACCOUNT_ID" ]; then
-            echo "ERROR: SPOKE_ACCOUNT_ID GitHub variable is missing"
+            echo "ERROR: SPOKE_ACCOUNT_ID GitHub repository variable is missing"
             exit 1
           fi
 
-          echo "Required variables are configured."
+          echo "Required GitHub variables are configured."
 
-      # ------------------------------------------------
-      # Terraform
-      # ------------------------------------------------
+      # --------------------------------
+      # Setup Terraform
+      # --------------------------------
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.13.3
 
+      # --------------------------------
+      # Terraform Init
+      # --------------------------------
       - name: Terraform Init
-        run: terraform init -reconfigure
+        run: |
+          terraform init -reconfigure -input=false
 
+      # --------------------------------
+      # Terraform Validate
+      # --------------------------------
       - name: Terraform Validate
-        run: terraform validate
+        run: |
+          terraform validate
 
+      # --------------------------------
+      # Terraform Plan
+      # --------------------------------
       - name: Terraform Plan
         env:
           TF_VAR_transit_gateway_id: ${{ vars.TRANSIT_GATEWAY_ID }}
           TF_VAR_spoke_account_id: ${{ vars.SPOKE_ACCOUNT_ID }}
         run: |
-          terraform plan -out=tfplan -input=false
+          terraform plan \
+            -input=false \
+            -out=tfplan
 
+      # --------------------------------
+      # Terraform Apply
+      # --------------------------------
       - name: Terraform Apply
         env:
           TF_VAR_transit_gateway_id: ${{ vars.TRANSIT_GATEWAY_ID }}
           TF_VAR_spoke_account_id: ${{ vars.SPOKE_ACCOUNT_ID }}
         run: |
-          terraform apply -auto-approve tfplan   
+          terraform apply \
+            -input=false \
+            -auto-approve \
+            tfplan   
