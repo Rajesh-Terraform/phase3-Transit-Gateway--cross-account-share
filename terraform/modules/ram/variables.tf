@@ -1,9 +1,14 @@
 variable "transit_gateway_id" {
-  description = "Transit Gateway ID"
+  description = "Hub Transit Gateway ID"
+  type        = string
+}
+
+variable "share_name" {
+  description = "RAM resource share name"
   type        = string
 }
 
 variable "spoke_account_id" {
-  description = "AWS account ID of the Spoke account"
+  description = "Spoke AWS account ID"
   type        = string
 }  
