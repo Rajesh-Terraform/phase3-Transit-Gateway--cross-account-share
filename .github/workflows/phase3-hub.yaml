@@ -40,7 +40,7 @@ jobs:
           aws sts get-caller-identity
 
       # Get TGW ID automatically from Hub
-      - name: Get Transit Gateway ID
+      - name : 
         id: tgw
         run: |
           TGW_ID=$(aws ec2 describe-transit-gateways \
@@ -55,8 +55,7 @@ jobs:
 
           echo "Transit Gateway found"
 
-          echo "transit_gateway_id=$TGW_ID" >> "$GITHUB_OUTPUT"
-
+          
       - name: Check Terraform State Bucket
         run: |
           aws s3api head-bucket \
