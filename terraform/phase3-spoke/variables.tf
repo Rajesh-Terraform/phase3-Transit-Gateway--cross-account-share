@@ -1,20 +1,30 @@
+variable "aws_region" {
+  type    = string
+  default = "ap-south-1"
+}
+
 variable "transit_gateway_id" {
-  description = "Hub Transit Gateway ID"
-  type        = string
+  type = string
 }
 
-variable "vpc_id" {
-  description = "Spoke VPC ID"
-  type        = string
+variable "spoke_vpc_id" {
+  type = string
 }
 
-variable "subnet_ids" {
-  description = "Private subnet IDs for TGW attachment"
-  type        = list(string)
+variable "spoke_private_subnet_ids" {
+  type = list(string)
 }
 
-variable "ram_share_name" {
-  description = "RAM share name created by Hub"
-  type        = string
-  default     = "phase3-tgw-share"
-}   
+variable "hub_vpc_cidr" {
+  type    = string
+  default = "10.0.0.0/16"
+}
+
+variable "spoke_vpc_cidr" {
+  type    = string
+  default = "10.1.0.0/16"
+}
+
+variable "spoke_route_table_ids" {
+  type = list(string)
+}  

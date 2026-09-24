@@ -1,7 +1,10 @@
-module "ram" {
-  source = "../modules/ram"
+module "tgw" {
+  source = "../modules/transit-gateway"
 
-  transit_gateway_id = var.transit_gateway_id
-  share_name         = var.share_name
-  spoke_account_id   = var.spoke_account_id
+  name        = "phase3-tgw"
+  description = "Phase 3 Cross Account Transit Gateway"
+
+  amazon_side_asn = 64512
+
+  environment = "dev"
 }  

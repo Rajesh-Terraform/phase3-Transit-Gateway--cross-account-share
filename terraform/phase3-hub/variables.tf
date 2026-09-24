@@ -1,15 +1,26 @@
-variable "transit_gateway_id" {
-  description = "Transit Gateway ID"
-  type        = string
+variable "aws_region" {
+  type    = string
+  default = "ap-south-1"
 }
 
-variable "share_name" {
-  description = "RAM resource share name"
-  type        = string
-  default     = "phase3-tgw-share"
+variable "hub_vpc_id" {
+  type = string
+}
+
+variable "hub_private_subnet_ids" {
+  type = list(string)
+}
+
+variable "hub_vpc_cidr" {
+  type    = string
+  default = "10.0.0.0/16"
+}
+
+variable "spoke_vpc_cidr" {
+  type    = string
+  default = "10.1.0.0/16"
 }
 
 variable "spoke_account_id" {
-  description = "Spoke AWS account ID"
-  type        = string
+  type = string
 }  
