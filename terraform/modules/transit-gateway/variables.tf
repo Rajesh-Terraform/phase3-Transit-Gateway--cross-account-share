@@ -12,7 +12,7 @@ variable "amazon_side_asn" {
   default = 64512
 }
 
-variable "environment" {
-  type    = string
-  default = "dev"
-} 
+variable "tags" {
+  type    = map(string)
+  default = {}
+}  

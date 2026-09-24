@@ -1,18 +1,16 @@
 resource "aws_ram_resource_share" "this" {
   name                      = var.name
-  allow_external_principals = true
+  allow_external_principals = var.allow_external_principals
 
-  tags = {
-    Name = var.name
-  }
+  tags = var.tags
 }
 
 resource "aws_ram_resource_association" "tgw" {
+  resource_arn       = var.transit_gateway_arn
   resource_share_arn = aws_ram_resource_share.this.arn
-  resource_arn       = "arn:aws:ec2:${var.aws_region}:${data.aws_caller_identity.current.account_id}:transit-gateway/${var.transit_gateway_id}"
 }
 
 resource "aws_ram_principal_association" "spoke" {
-  resource_share_arn = aws_ram_resource_share.this.arn
   principal          = var.spoke_account_id
-}  
+  resource_share_arn = aws_ram_resource_share.this.arn
+}   

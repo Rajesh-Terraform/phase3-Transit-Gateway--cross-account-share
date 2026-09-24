@@ -1,4 +1,7 @@
 output "spoke_attachment_id" {
-  description = "Spoke Transit Gateway VPC attachment ID"
-  value       = module.spoke_attachment.attachment_id
+  value = module.spoke_attachment.attachment_id
+}
+
+output "spoke_attachment_arn" {
+  value = module.spoke_attachment.attachment_arn
 }  

@@ -1,24 +1,48 @@
 variable "aws_region" {
-  description = "AWS region"
-  type        = string
+  type = string
 }
 
-variable "hub_vpc_id" {
-  description = "Hub VPC ID"
-  type        = string
+variable "project_name" {
+  type = string
 }
 
-variable "hub_private_subnet_ids" {
-  description = "Hub private subnet IDs for TGW attachment"
-  type        = list(string)
+variable "tgw_name" {
+  type = string
+}
+
+variable "tgw_description" {
+  type = string
+}
+
+variable "amazon_side_asn" {
+  type = number
+}
+
+variable "ram_share_name" {
+  type = string
 }
 
 variable "spoke_account_id" {
-  description = "AWS Account ID of the Spoke account"
-  type        = string
+  type = string
+}
 
-  validation {
-    condition     = can(regex("^[0-9]{12}$", var.spoke_account_id))
-    error_message = "spoke_account_id must be exactly 12 digits."
-  }
-}   
+variable "hub_vpc_id" {
+  type = string
+}
+
+variable "hub_private_subnet_ids" {
+  type = list(string)
+}
+
+variable "hub_cidr" {
+  type = string
+}
+
+variable "spoke_cidr" {
+  type = string
+}
+
+variable "spoke_attachment_id" {
+  type    = string
+  default = ""
+}  
