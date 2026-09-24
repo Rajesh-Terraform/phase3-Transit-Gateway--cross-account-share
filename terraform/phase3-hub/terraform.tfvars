@@ -1,10 +1,8 @@
-aws_region = "ap-south-1"
-
-hub_vpc_id = "vpc-XXXXXXXX"
+hub_vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
 
 hub_private_subnet_ids = [
-  "subnet-XXXXXXXX",
-  "subnet-YYYYYYYY"
+  "subnet-xxxxxxxxxxxxxxxxx",
+  "subnet-yyyyyyyyyyyyyyyyy"
 ]
 
-spoke_account_id = "123456789012"   
+spoke_account_id = "YOUR_SPOKE_ACCOUNT_ID"  

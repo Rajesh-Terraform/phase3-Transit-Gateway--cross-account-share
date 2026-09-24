@@ -1,11 +1,11 @@
 module "tgw" {
-  source = "../modules/tgw"
+  source = "../modules/transit-gateway"
 
   name = "phase3-hub-tgw"
 }
 
 module "ram" {
-  source = "../modules/ram"
+  source = "../modules/ram-share"
 
   name = "phase3-tgw-share"
 
@@ -24,4 +24,4 @@ module "hub_attachment" {
   vpc_id = var.hub_vpc_id
 
   subnet_ids = var.hub_private_subnet_ids
-} 
+}  
