@@ -3,13 +3,14 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "this" {
   vpc_id             = var.vpc_id
   subnet_ids         = var.subnet_ids
 
-  dns_support  = var.dns_support
-  ipv6_support = var.ipv6_support
+  dns_support = "enable"
 
-  tags = merge(
-    var.tags,
-    {
-      Name = var.name
-    }
-  )
-}  
+  ipv6_support = "disable"
+
+  appliance_mode_support = "disable"
+
+  tags = {
+    Name    = "phase3-hub-tgw-attachment"
+    Project = "phase3-tgw"
+  }
+}   

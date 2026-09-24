@@ -1,7 +1,9 @@
 output "resource_share_id" {
-  value = aws_ram_resource_share.this.id
+  description = "RAM resource share ID"
+  value       = aws_ram_resource_share.this.id
 }
 
 output "resource_share_arn" {
-  value = aws_ram_resource_share.this.arn
+  description = "RAM resource share ARN"
+  value       = aws_ram_resource_share.this.arn
 }  

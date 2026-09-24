@@ -1,7 +1,4 @@
 output "attachment_id" {
-  value = aws_ec2_transit_gateway_vpc_attachment.this.id
-}
-
-output "attachment_arn" {
-  value = aws_ec2_transit_gateway_vpc_attachment.this.arn
+  description = "Transit Gateway VPC attachment ID"
+  value       = aws_ec2_transit_gateway_vpc_attachment.this.id
 }  

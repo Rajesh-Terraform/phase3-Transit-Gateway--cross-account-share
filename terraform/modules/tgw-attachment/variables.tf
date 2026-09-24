@@ -1,30 +1,19 @@
-variable "name" {
-  type = string
-}
-
 variable "transit_gateway_id" {
-  type = string
+  description = "Transit Gateway ID"
+  type        = string
 }
 
 variable "vpc_id" {
-  type = string
+  description = "VPC ID"
+  type        = string
 }
 
 variable "subnet_ids" {
-  type = list(string)
-}
+  description = "Subnet IDs for TGW attachment"
+  type        = list(string)
 
-variable "dns_support" {
-  type    = string
-  default = "enable"
-}
-
-variable "ipv6_support" {
-  type    = string
-  default = "disable"
-}
-
-variable "tags" {
-  type    = map(string)
-  default = {}
-}  
+  validation {
+    condition     = length(var.subnet_ids) >= 1
+    error_message = "At least one subnet ID is required."
+  }
+}   
