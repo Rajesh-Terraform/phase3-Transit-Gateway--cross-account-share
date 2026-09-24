@@ -1,48 +1,49 @@
 variable "aws_region" {
-  type = string
+  description = "AWS region"
+  type        = string
 }
 
 variable "project_name" {
-  type = string
+  description = "Project name"
+  type        = string
 }
 
 variable "tgw_name" {
-  type = string
+  description = "Transit Gateway name"
+  type        = string
 }
 
 variable "tgw_description" {
-  type = string
+  description = "Transit Gateway description"
+  type        = string
 }
 
 variable "amazon_side_asn" {
-  type = number
+  description = "Transit Gateway Amazon side ASN"
+  type        = number
 }
 
 variable "ram_share_name" {
-  type = string
+  description = "RAM share name"
+  type        = string
 }
 
 variable "spoke_account_id" {
-  type = string
+  description = "Spoke AWS account ID"
+  type        = string
 }
 
 variable "hub_vpc_id" {
-  type = string
-}
-
-variable "hub_private_subnet_ids" {
-  type = list(string)
+  description = "Hub VPC ID"
+  type        = string
 }
 
 variable "hub_cidr" {
-  type = string
+  description = "Hub VPC CIDR"
+  type        = string
 }
 
 variable "spoke_cidr" {
-  type = string
-}
-
-variable "spoke_attachment_id" {
-  type    = string
-  default = ""
+  description = "Spoke VPC CIDR"
+  type        = string
 }  
