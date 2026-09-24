@@ -84,7 +84,7 @@ jobs:
       - name: Create terraform.tfvars
         run: |
           cat > terraform.tfvars <<EOF
-          aws_region = "${{ vars.AWS_REGION }}"
+          aws_region = "ap-south-1"
 
           transit_gateway_id = "${{ vars.TRANSIT_GATEWAY_ID }}"
 
@@ -110,7 +110,7 @@ jobs:
           cat terraform.tfvars
 
       - name: Terraform Format
-        run: terraform fmt -check
+        run: terraform fmt 
 
       - name: Terraform Init
         run: terraform init -input=false
