@@ -19,12 +19,12 @@ variable "tgw_description" {
 }
 
 variable "amazon_side_asn" {
-  description = "Transit Gateway Amazon side ASN"
+  description = "Amazon side ASN"
   type        = number
 }
 
 variable "ram_share_name" {
-  description = "RAM share name"
+  description = "AWS RAM share name"
   type        = string
 }
 
@@ -34,16 +34,11 @@ variable "spoke_account_id" {
 }
 
 variable "hub_vpc_id" {
-  description = "Hub VPC ID"
+  description = "Existing Hub VPC ID"
   type        = string
 }
 
-variable "hub_cidr" {
-  description = "Hub VPC CIDR"
-  type        = string
-}
-
-variable "spoke_cidr" {
-  description = "Spoke VPC CIDR"
-  type        = string
+variable "hub_private_subnet_ids" {
+  description = "Private subnet IDs used for Hub TGW attachment"
+  type        = list(string)
 }  
