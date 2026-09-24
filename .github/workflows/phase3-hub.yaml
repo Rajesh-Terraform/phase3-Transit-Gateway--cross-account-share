@@ -94,4 +94,4 @@ jobs:
           terraform apply \
             -input=false \
             -auto-approve \
-            tfplan     
+            tfplan       
