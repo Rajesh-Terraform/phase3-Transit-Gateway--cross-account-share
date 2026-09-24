@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "YOUR-TERRAFORM-STATE-BUCKET"
+    bucket = "dhoni-demo-terraform-bucket-123456"
     key    = "phase3/hub/terraform.tfstate"
     region = "ap-south-1"
   }
