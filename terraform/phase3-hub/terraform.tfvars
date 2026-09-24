@@ -1,19 +1,19 @@
 aws_region = "ap-south-1"
 
-hub_vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+hub_vpc_id = "vpc-XXXXXXXX"
 
 hub_private_subnet_ids = [
-  "subnet-aaaaaaaaaaaaaaaaa",
-  "subnet-bbbbbbbbbbbbbbbbb"
+  "subnet-XXXXXXXX",
+  "subnet-YYYYYYYY"
 ]
 
 hub_route_table_ids = [
-  "rtb-aaaaaaaaaaaaaaaaa",
-  "rtb-bbbbbbbbbbbbbbbbb"
+  "rtb-XXXXXXXX",
+  "rtb-YYYYYYYY"
 ]
 
 hub_vpc_cidr = "10.0.0.0/16"
 
 spoke_vpc_cidr = "10.1.0.0/16"
 
-spoke_account_id = "434097521299" 
+spoke_account_id = "434097521299"    
