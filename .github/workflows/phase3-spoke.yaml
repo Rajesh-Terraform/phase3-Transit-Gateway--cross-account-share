@@ -50,6 +50,14 @@ jobs:
 
           echo "Transit Gateway ID is configured."
 
+      - name: Verify Transit Gateway
+        env:
+          TRANSIT_GATEWAY_ID: ${{ vars.TRANSIT_GATEWAY_ID }}
+        run: |
+          aws ec2 describe-transit-gateways \
+            --transit-gateway-ids "$TRANSIT_GATEWAY_ID" \
+            --region ap-south-1
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -78,4 +86,4 @@ jobs:
           terraform apply \
             -input=false \
             -auto-approve \
-            tfplan     
+            tfplan    
