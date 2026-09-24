@@ -1,15 +1,14 @@
-output "transit_gateway_id" {
-  value = module.tgw.transit_gateway_id
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
 }
 
-output "transit_gateway_arn" {
-  value = module.tgw.transit_gateway_arn
-}
-
-output "ram_share_arn" {
-  value = module.ram.share_arn
-}
-
-output "hub_attachment_id" {
-  value = module.hub_attachment.attachment_id
-}  
+provider "aws" {
+  region = var.aws_region
+}   

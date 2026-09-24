@@ -4,40 +4,27 @@ variable "aws_region" {
   default     = "ap-south-1"
 }
 
-
 variable "hub_vpc_id" {
-  description = "Existing Hub VPC ID"
+  description = "Hub VPC ID"
   type        = string
 }
-
 
 variable "hub_private_subnet_ids" {
-  description = "Private subnet IDs for TGW attachment"
+  description = "Private subnet IDs used for Hub TGW attachment"
   type        = list(string)
+
+  validation {
+    condition     = length(var.hub_private_subnet_ids) >= 2
+    error_message = "Provide at least two Hub private subnet IDs."
+  }
 }
-
-
-variable "hub_route_table_ids" {
-  description = "Hub VPC route table IDs"
-  type        = list(string)
-}
-
-
-variable "hub_vpc_cidr" {
-  description = "Hub VPC CIDR"
-  type        = string
-  default     = "10.0.0.0/16"
-}
-
-
-variable "spoke_vpc_cidr" {
-  description = "Spoke VPC CIDR"
-  type        = string
-  default     = "10.1.0.0/16"
-}
-
 
 variable "spoke_account_id" {
-  description = "Spoke AWS account ID"
+  description = "AWS Account ID of the Spoke account"
   type        = string
+
+  validation {
+    condition     = can(regex("^[0-9]{12}$", var.spoke_account_id))
+    error_message = "spoke_account_id must be a 12-digit AWS account ID."
+  }
 }  
