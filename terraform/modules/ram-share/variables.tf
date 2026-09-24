@@ -8,9 +8,4 @@ variable "transit_gateway_arn" {
 
 variable "spoke_account_id" {
   type = string
-}
-
-variable "allow_external_principals" {
-  type    = bool
-  default = true
 }  
