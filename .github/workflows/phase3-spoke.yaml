@@ -81,6 +81,15 @@ jobs:
         run: |
           terraform init -input=false
 
+
+
+          - name: Check TGW ID
+            run: |
+               if [ -z "${{ vars.TRANSIT_GATEWAY_ID }}" ]; then
+                echo "ERROR: TRANSIT_GATEWAY_ID is not configured"
+                exit 1
+                 fi  
+
       # ------------------------------------------------
       # 7. Terraform Validate
       # ------------------------------------------------
@@ -109,4 +118,4 @@ jobs:
           terraform apply \
             -input=false \
             -auto-approve \
-            tfplan    
+            tfplan     
