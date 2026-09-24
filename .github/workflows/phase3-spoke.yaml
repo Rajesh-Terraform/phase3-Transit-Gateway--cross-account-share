@@ -15,9 +15,12 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  AWS_REGION: ap-south-1
+
 jobs:
   phase3-spoke:
-    name: Phase 3 - Spoke Attachment
+    name: Phase 3 - Spoke TGW Attachment
     runs-on: ubuntu-latest
 
     defaults:
@@ -26,51 +29,68 @@ jobs:
 
     steps:
 
+      # ------------------------------------------------
+      # 1. Checkout
+      # ------------------------------------------------
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ------------------------------------------------
+      # 2. AWS authentication - SPOKE ACCOUNT
+      # ------------------------------------------------
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::434097521299:role/testingdummy
-          aws-region: ap-south-1
+          aws-region: ${{ env.AWS_REGION }}
 
+      # ------------------------------------------------
+      # 3. Verify AWS account
+      # ------------------------------------------------
       - name: Check AWS Identity
         run: |
           aws sts get-caller-identity
 
+      # ------------------------------------------------
+      # 4. Get TGW ID from GitHub Variable
+      # ------------------------------------------------
       - name: Check Transit Gateway ID
-        env:
-          TRANSIT_GATEWAY_ID: ${{ vars.TRANSIT_GATEWAY_ID }}
         run: |
-          if [ -z "$TRANSIT_GATEWAY_ID" ]; then
-            echo "ERROR: TRANSIT_GATEWAY_ID GitHub repository variable is missing"
+          if [ -z "${{ vars.TRANSIT_GATEWAY_ID }}" ]; then
+            echo "ERROR: TRANSIT_GATEWAY_ID is not configured"
+            echo "Go to:"
+            echo "Settings -> Secrets and variables -> Actions -> Variables"
+            echo "Create TRANSIT_GATEWAY_ID"
             exit 1
           fi
 
-          echo "Transit Gateway ID is configured."
+          echo "TRANSIT_GATEWAY_ID is configured."
 
-      - name: Verify Transit Gateway
-        env:
-          TRANSIT_GATEWAY_ID: ${{ vars.TRANSIT_GATEWAY_ID }}
-        run: |
-          aws ec2 describe-transit-gateways \
-            --transit-gateway-ids "$TRANSIT_GATEWAY_ID" \
-            --region ap-south-1
-
+      # ------------------------------------------------
+      # 5. Setup Terraform
+      # ------------------------------------------------
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.13.3
 
+      # ------------------------------------------------
+      # 6. Terraform Init
+      # ------------------------------------------------
       - name: Terraform Init
         run: |
           terraform init -input=false
 
+      # ------------------------------------------------
+      # 7. Terraform Validate
+      # ------------------------------------------------
       - name: Terraform Validate
         run: |
           terraform validate
 
+      # ------------------------------------------------
+      # 8. Terraform Plan
+      # ------------------------------------------------
       - name: Terraform Plan
         env:
           TF_VAR_transit_gateway_id: ${{ vars.TRANSIT_GATEWAY_ID }}
@@ -79,6 +99,9 @@ jobs:
             -input=false \
             -out=tfplan
 
+      # ------------------------------------------------
+      # 9. Terraform Apply
+      # ------------------------------------------------
       - name: Terraform Apply
         env:
           TF_VAR_transit_gateway_id: ${{ vars.TRANSIT_GATEWAY_ID }}
@@ -86,4 +109,4 @@ jobs:
           terraform apply \
             -input=false \
             -auto-approve \
-            tfplan  
+            tfplan    
