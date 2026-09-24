@@ -62,4 +62,4 @@ jobs:
         run: terraform plan -input=false -var-file="terraform.tfvars"
 
       - name: Terraform Apply
-        run: terraform apply -input=false -auto-approve -var-file="terraform.tfvars" 
+        run: terraform apply -input=false -auto-approve -var-file="terraform.tfvars"  
