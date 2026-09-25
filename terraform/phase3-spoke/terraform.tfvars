@@ -1,19 +1,9 @@
 aws_region = "ap-south-1"
 
-transit_gateway_id = "tgw-xxxxxxxxxxxxxxxxx"
+transit_gateway_id = "tgw-0123456789abcdef0"
 
-spoke_vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+spoke_vpc_id = "vpc-0123456789abcdef0"
 
-spoke_private_subnet_ids = [
-  "subnet-xxxxxxxxxxxxxxxxx",
-  "subnet-xxxxxxxxxxxxxxxxx"
-]
+spoke_private_subnet_1_id = "subnet-0123456789abcdef0"
 
-spoke_route_table_ids = [
-  "rtb-xxxxxxxxxxxxxxxxx",
-  "rtb-xxxxxxxxxxxxxxxxx"
-]
-
-hub_vpc_cidr = "10.0.0.0/16"
-
-spoke_vpc_cidr = "10.1.0.0/16"   
+spoke_private_subnet_2_id = "subnet-0123456789abcdef0"   
