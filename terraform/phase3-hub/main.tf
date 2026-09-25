@@ -7,17 +7,8 @@ module "tgw" {
 module "ram" {
   source = "../../modules/ram-share"
 
-  ram_name                  = var.ram_name
-  transit_gateway_arn       = module.tgw.transit_gateway_arn
-  spoke_account_id          = var.spoke_account_id
+  name                    = var.ram_name
+  resource_arn            = module.tgw.transit_gateway_arn
+  spoke_account_id        = var.spoke_account_id
   allow_external_principals = true
-}  
-
-
-module "tgw" {
-  source = "../../modules/transit-gateway"
-}
-
-module "ram" {
-  source = "../../modules/ram-share"
 } 

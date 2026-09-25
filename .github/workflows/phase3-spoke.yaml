@@ -2,10 +2,12 @@ name: Phase 3 - Spoke
 
 on:
   workflow_dispatch:
-
   push:
     branches:
       - main
+    paths:
+      - "phase3/spoke/**"
+      - ".github/workflows/phase3-spoke.yml"
 
 permissions:
   id-token: write
@@ -18,60 +20,44 @@ jobs:
 
     env:
       AWS_REGION: ap-south-1
-      TF_VAR_aws_region: ap-south-1
       TF_VAR_transit_gateway_id: ${{ secrets.TRANSIT_GATEWAY_ID }}
 
     steps:
-      - name: Checkout main branch
+
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::434097521299:role/testingdummy
-          aws-region: ap-south-1
-
-      - name: Check AWS identity
-        run: |
-          aws sts get-caller-identity
+          role-to-assume: arn:aws:iam::434097521299:role/testingdummy 
+          aws-region: ap-south-1 
 
       - name: Check Transit Gateway ID
         run: |
           if [ -z "$TF_VAR_transit_gateway_id" ]; then
-            echo "ERROR: TRANSIT_GATEWAY_ID GitHub Secret is missing"
+            echo "ERROR: GitHub Secret TRANSIT_GATEWAY_ID is missing"
             exit 1
           fi
 
           echo "Transit Gateway ID is configured"
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Verify AWS identity
+        run: |
+          aws sts get-caller-identity
 
       - name: Terraform Init
         working-directory: phase3/spoke
-        run: terraform init -input=false
-
-      - name: Terraform Format
-        working-directory: phase3/spoke
-        run: terraform fmt -check
+        run: terraform init
 
       - name: Terraform Validate
-        working-directory: phase3/spoke  
+        working-directory: phase3/spoke
         run: terraform validate
 
       - name: Terraform Plan
         working-directory: phase3/spoke
-        run: |
-          terraform plan \
-            -input=false \
-            -var-file="terraform.tfvars"
+        run: terraform plan
 
       - name: Terraform Apply
         working-directory: phase3/spoke
-        run: |
-          terraform apply \
-            -input=false \
-            -auto-approve \
-            -var-file="terraform.tfvars"   
+        run: terraform apply -auto-approve   

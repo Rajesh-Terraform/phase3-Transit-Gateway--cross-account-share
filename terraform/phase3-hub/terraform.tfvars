@@ -1,11 +1,5 @@
-aws_region = "ap-south-1"
+amazon_side_asn = 64512
 
-project_name = "hub-spoke-tgw"
+ram_name = "phase3-tgw-share"
 
-tgw_name = "hub-tgw"
-
-tgw_description = "Transit Gateway for hub and spoke VPC connectivity"
-
-ram_share_name = "hub-tgw-share"
-
-spoke_account_id = "123456789012"   
+spoke_account_id = "123456789012" 
