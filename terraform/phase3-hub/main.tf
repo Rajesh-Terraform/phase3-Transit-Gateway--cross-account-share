@@ -1,13 +1,13 @@
 module "tgw" {
   source = "./modules/transit-gateway"
 
-  vpc_id     = var.hub_vpc_id
-  subnet_ids = var.hub_private_subnet_ids
+  name = var.tgw_name
 }
 
 module "ram" {
   source = "./modules/ram-share"
 
-  transit_gateway_arn = module.tgw.transit_gateway_arn
-  spoke_account_id    = var.spoke_account_id
+  name               = var.ram_share_name
+  transit_gateway_id = module.tgw.transit_gateway_id
+  spoke_account_id   = var.spoke_account_id
 }  
