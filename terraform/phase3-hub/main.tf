@@ -12,3 +12,12 @@ module "ram" {
   spoke_account_id          = var.spoke_account_id
   allow_external_principals = true
 }  
+
+
+module "tgw" {
+  source = "../../modules/transit-gateway"
+}
+
+module "ram" {
+  source = "../../modules/ram-share"
+} 

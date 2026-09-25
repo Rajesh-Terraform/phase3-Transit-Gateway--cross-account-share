@@ -11,4 +11,4 @@ output "transit_gateway_id" {
 output "spoke_vpc_id" {
   description = "Spoke VPC ID"
   value       = var.spoke_vpc_id
-}     
+}      
