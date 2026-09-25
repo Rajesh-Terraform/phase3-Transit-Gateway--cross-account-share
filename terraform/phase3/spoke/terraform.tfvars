@@ -1,24 +1,19 @@
 aws_region = "ap-south-1"
 
-spoke_vpc_id = "vpc-XXXXXXXX"
+ram_resource_share_arn = "arn:aws:ram:ap-south-1:123456789012:resource-share/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
-spoke_tgw_subnet_ids = [
-  "subnet-XXXXXXXX",
-  "subnet-YYYYYYYY"
+transit_gateway_id = "tgw-xxxxxxxxxxxxxxxxx"
+
+vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+
+subnet_ids = [
+  "subnet-xxxxxxxxxxxxxxxxx",
+  "subnet-yyyyyyyyyyyyyyyyy"
 ]
 
-spoke_vpc_route_table_ids = [
-  "rtb-XXXXXXXX",
-  "rtb-YYYYYYYY"
+route_table_ids = [
+  "rtb-xxxxxxxxxxxxxxxxx",
+  "rtb-yyyyyyyyyyyyyyyyy"
 ]
 
-transit_gateway_id = "tgw-XXXXXXXX"
-
-spoke_vpc_cidr = "10.1.0.0/16"
-
-hub_vpc_cidr = "10.0.0.0/16"
-
-ram_resource_share_arn = "arn:aws:ram:ap-south-1:HUB_ACCOUNT_ID:resource-share/XXXXXXXX"
-
-accept_ram_invitation = true
- 
+hub_vpc_cidr = "10.0.0.0/16"   

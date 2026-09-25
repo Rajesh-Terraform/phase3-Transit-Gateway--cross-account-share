@@ -1,21 +1,4 @@
-variable "name" {
-  type = string
-}
-
-variable "resource_arn" {
-  type = string
-}
-
-variable "spoke_account_id" {
-  type = string
-}
-
-variable "allow_external_principals" {
-  type    = bool
-  default = true
-}
-
-variable "tags" {
-  type    = map(string)
-  default = {}
-} 
+variable "ram_resource_share_arn" {
+  description = "RAM resource share ARN created by Hub account"
+  type        = string
+}  

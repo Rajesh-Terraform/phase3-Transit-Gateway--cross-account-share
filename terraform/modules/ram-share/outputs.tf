@@ -1,7 +1,4 @@
-output "resource_share_id" {
-  value = aws_ram_resource_share.this.id
-}
-
-output "resource_share_arn" {
-  value = aws_ram_resource_share.this.arn
+output "share_arn" {
+  description = "Accepted RAM resource share ARN"
+  value       = aws_ram_resource_share_accepter.this.share_arn
 }  

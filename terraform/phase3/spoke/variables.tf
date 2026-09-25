@@ -1,40 +1,36 @@
 variable "aws_region" {
-  type    = string
-  default = "ap-south-1"
-}
-
-variable "spoke_vpc_id" {
-  type = string
-}
-
-variable "spoke_tgw_subnet_ids" {
-  type = list(string)
-}
-
-variable "spoke_vpc_route_table_ids" {
-  type = list(string)
-}
-
-variable "transit_gateway_id" {
-  type = string
-}
-
-variable "spoke_vpc_cidr" {
-  type    = string
-  default = "10.1.0.0/16"
-}
-
-variable "hub_vpc_cidr" {
-  type    = string
-  default = "10.0.0.0/16"
+  description = "AWS region"
+  type        = string
+  default     = "ap-south-1"
 }
 
 variable "ram_resource_share_arn" {
-  type    = string
-  default = ""
+  description = "RAM resource share ARN created by Hub"
+  type        = string
 }
 
-variable "accept_ram_invitation" {
-  type    = bool
-  default = false
-}  
+variable "transit_gateway_id" {
+  description = "Transit Gateway ID from Hub"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "Spoke VPC ID"
+  type        = string
+}
+
+variable "subnet_ids" {
+  description = "Spoke subnet IDs used for TGW attachment"
+  type        = list(string)
+}
+
+variable "route_table_ids" {
+  description = "Spoke VPC route table IDs"
+  type        = list(string)
+}
+
+variable "hub_vpc_cidr" {
+  description = "Hub VPC CIDR"
+  type        = string
+  default     = "10.0.0.0/16"
+}   
