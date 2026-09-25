@@ -85,9 +85,9 @@ jobs:
 
       # 10. Terraform Apply
       - name: Terraform Apply
-        working-directory: phase3/spoke
+        working-directory: phase3/spoke  
         run: |
           terraform apply \
             -input=false \
             -auto-approve \
-            -var-file="terraform.tfvars"    
+            -var-file="terraform.tfvars"      

@@ -17,3 +17,5 @@ output "hub_attachment_id" {
   description = "Hub VPC TGW attachment ID"
   value       = module.hub_attachment.attachment_id
 }   
+
+
