@@ -32,4 +32,5 @@ variable "ram_share_name" {
 variable "spoke_account_id" {
   description = "AWS Account ID of spoke account"
   type        = string
-}   
+}  
+
