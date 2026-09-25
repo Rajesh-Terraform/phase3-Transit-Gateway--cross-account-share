@@ -1,113 +1,93 @@
-name: Phase 3 - Spoke TGW Attachment
+name: Phase 3 - Spoke
 
 on:
   workflow_dispatch:
-    inputs:
-      transit_gateway_id:
-        description: "Transit Gateway ID created in Hub account"
-        required: true
-        type: string
-
   push:
     branches:
       - main
     paths:
-      - "terraform/modules/**"
-      - "terraform/phase3-spoke/**"
-      - ".github/workflows/phase3-spoke.yaml"
+      - "phase3/spoke/**"
+      - ".github/workflows/phase3-spoke.yml"
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  phase3-spoke:
-    name: Attach Spoke VPC to TGW
+  spoke:
+    name: Deploy Phase 3 Spoke
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: terraform/phase3-spoke
 
     env:
       AWS_REGION: ap-south-1
-      TF_VAR_transit_gateway_id: ${{ inputs.transit_gateway_id }}
+      TF_VAR_aws_region: ap-south-1
+      TF_VAR_transit_gateway_id: ${{ secrets.TRANSIT_GATEWAY_ID }}
 
     steps:
 
-      # ------------------------------------------------
-      # 1. Checkout
-      # ------------------------------------------------
-      - name: Checkout repository
+      # 1. Checkout MAIN branch
+      - name: Checkout main branch
         uses: actions/checkout@v4
+        with:
+          ref: main
 
-      # ------------------------------------------------
-      # 2. Configure AWS credentials
-      # ------------------------------------------------
+      # 2. Configure AWS OIDC
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume:   arn:aws:iam::434097521299:role/testingdummy 
-          aws-region: ap-south-1  
+          role-to-assume: arn:aws:iam::SPOKE_ACCOUNT_ID:role/testingdummy
+          aws-region: ap-south-1
 
-      # ------------------------------------------------
-      # 3. Check AWS identity
-      # ------------------------------------------------
+      # 3. Verify AWS account
       - name: Check AWS identity
         run: |
           aws sts get-caller-identity
 
-      # ------------------------------------------------
       # 4. Check TGW ID
-      # ------------------------------------------------
-      - name: Validate Transit Gateway ID
+      - name: Check Transit Gateway ID
         run: |
-          if [ -z "${TF_VAR_transit_gateway_id}" ]; then
-            echo "ERROR: Transit Gateway ID is missing"
+          if [ -z "$TF_VAR_transit_gateway_id" ]; then
+            echo "ERROR: TRANSIT_GATEWAY_ID GitHub Secret is missing"
             exit 1
           fi
 
-          echo "Transit Gateway ID: ${TF_VAR_transit_gateway_id}"
+          echo "Transit Gateway ID is configured"
 
-      # ------------------------------------------------
-      # 5. Terraform version
-      # ------------------------------------------------
+      # 5. Install Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # ------------------------------------------------
-      # 6. Terraform init
-      # ------------------------------------------------
+      # 6. Terraform Init
       - name: Terraform Init
-        run: terraform init
+        working-directory: phase3/spoke
+        run: |
+          terraform init -input=false
 
-      # ------------------------------------------------
-      # 7. Terraform format
-      # ------------------------------------------------
-      - name: Terraform Format 
-        run: terraform fmt 
+      # 7. Terraform Format Check
+      - name: Terraform Format
+        working-directory: phase3/spoke
+        run: |
+          terraform fmt -check
 
-      # ------------------------------------------------
-      # 8. Terraform validate
-      # ------------------------------------------------
+      # 8. Terraform Validate
       - name: Terraform Validate
-        run: terraform validate
+        working-directory: phase3/spoke
+        run: |
+          terraform validate
 
-      # ------------------------------------------------
-      # 9. Terraform plan
-      # ------------------------------------------------
+      # 9. Terraform Plan
       - name: Terraform Plan
+        working-directory: phase3/spoke
         run: |
           terraform plan \
             -input=false \
             -var-file="terraform.tfvars"
 
-      # ------------------------------------------------
-      # 10. Terraform apply
-      # ------------------------------------------------
+      # 10. Terraform Apply
       - name: Terraform Apply
+        working-directory: phase3/spoke
         run: |
           terraform apply \
             -input=false \
             -auto-approve \
-            -var-file="terraform.tfvars"   
+            -var-file="terraform.tfvars" 
