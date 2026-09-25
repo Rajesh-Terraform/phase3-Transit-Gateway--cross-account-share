@@ -1,28 +1,29 @@
-name: Phase 3 - Hub TGW
+name: Phase 3 - Hub
 
 on:
+  workflow_dispatch:
+
   push:
     branches:
       - main
     paths:
       - "terraform/modules/**"
-      - "terraform/phase3-hub/**"
+      - "terraform/phase3/hub/**"
       - ".github/workflows/phase3-hub.yaml"
-
-  workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
 
-jobs:
-  phase3-hub:
-    name: Create TGW and RAM Share
-    runs-on: ubuntu-latest
+env:
+  AWS_REGION: ap-south-1
+  TF_WORKING_DIR: terraform/phase3/hub
 
-    defaults:
-      run:
-        working-directory: terraform/phase3-hub
+jobs:
+
+  terraform:
+    name: Deploy Phase 3 Hub
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -30,36 +31,34 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::647132523867:role/github-actions-test-role
+          role-to-assume: arn:aws:iam::647132523867:role/github-actions-test-role 
           aws-region: ap-south-1
 
-      - name: Check AWS identity
+      - name: Verify AWS identity
         run: |
           aws sts get-caller-identity
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Check Terraform files
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Files:"
-          ls -la
-
       - name: Terraform Format
+        working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform fmt 
 
       - name: Terraform Init
-        run: terraform init -input=false
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
 
       - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -input=false -var-file="terraform.tfvars"
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform plan
 
       - name: Terraform Apply
-        run: terraform apply -input=false -auto-approve -var-file="terraform.tfvars"       
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -auto-approve    

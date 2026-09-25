@@ -1,14 +1,22 @@
-variable "tgw_name" {
-  description = "Transit Gateway name"
+variable "name" {
   type        = string
+  description = "Transit Gateway name"
 }
 
-variable "tgw_description" {
-  description = "Transit Gateway description"
+variable "description" {
   type        = string
+  description = "Transit Gateway description"
+  default     = "Phase 3 Hub-Spoke Transit Gateway"
 }
 
 variable "amazon_side_asn" {
-  description = "Amazon side ASN"
   type        = number
+  description = "Amazon side ASN"
+  default     = 64512
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Transit Gateway tags"
+  default     = {}
 }  

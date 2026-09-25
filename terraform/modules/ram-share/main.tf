@@ -1,19 +1,16 @@
 resource "aws_ram_resource_share" "this" {
-  name                      = var.ram_share_name
-  allow_external_principals = true
+  name                      = var.name
+  allow_external_principals = var.allow_external_principals
 
-  tags = {
-    Name    = var.ram_share_name
-    Project = "phase3-tgw"
-  }
+  tags = var.tags
 }
 
 resource "aws_ram_resource_association" "tgw" {
-  resource_arn       = var.tgw_arn
+  resource_arn = var.resource_arn
   resource_share_arn = aws_ram_resource_share.this.arn
 }
 
 resource "aws_ram_principal_association" "spoke" {
   principal          = var.spoke_account_id
   resource_share_arn = aws_ram_resource_share.this.arn
-}   
+} 

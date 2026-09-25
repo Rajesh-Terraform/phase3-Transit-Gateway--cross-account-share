@@ -1,63 +1,104 @@
+
 name: Phase 3 - Spoke
 
 on:
   workflow_dispatch:
+
   push:
     branches:
       - main
     paths:
-      - "phase3/spoke/**"
-      - ".github/workflows/phase3-spoke.yml"
+      - "terraform/modules/**"
+      - "terraform/phase3/spoke/**"
+      - ".github/workflows/phase3-spoke.yaml"
 
 permissions:
   id-token: write
   contents: read
+
+env:
+  AWS_REGION: ap-south-1
+  TF_WORKING_DIR: terraform/phase3/spoke
 
 jobs:
   spoke:
     name: Deploy Phase 3 Spoke
     runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: ap-south-1
-      TF_VAR_transit_gateway_id: ${{ secrets.TRANSIT_GATEWAY_ID }}
+    defaults:
+      run:
+        working-directory: terraform/phase3/spoke
 
     steps:
 
-      - name: Checkout repository
+      # ------------------------------------------------
+      # 1. Checkout repository
+      # ------------------------------------------------
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
+      # ------------------------------------------------
+      # 2. Configure AWS using GitHub OIDC
+      # ------------------------------------------------
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::434097521299:role/testingdummy 
+          role-to-assume: arn:aws:iam::434097521299:role/testingdummy
           aws-region: ap-south-1 
 
-      - name: Check Transit Gateway ID
+      # ------------------------------------------------
+      # 3. Verify AWS account
+      # ------------------------------------------------
+      - name: Verify AWS Identity
         run: |
-          if [ -z "$TF_VAR_transit_gateway_id" ]; then
-            echo "ERROR: GitHub Secret TRANSIT_GATEWAY_ID is missing"
-            exit 1
-          fi
-
-          echo "Transit Gateway ID is configured"
-
-      - name: Verify AWS identity
-        run: |
+          echo "AWS Account:"
           aws sts get-caller-identity
 
+      # ------------------------------------------------
+      # 4. Setup Terraform
+      # ------------------------------------------------
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # ------------------------------------------------
+      # 5. Terraform Version
+      # ------------------------------------------------
+      - name: Terraform Version
+        run: terraform version
+
+      # ------------------------------------------------
+      # 6. Terraform Format Check
+      # ------------------------------------------------
+      - name: Terraform Format Check
+        working-directory: terraform
+        run: terraform fmt 
+
+      # ------------------------------------------------
+      # 7. Terraform Init
+      # ------------------------------------------------
       - name: Terraform Init
-        working-directory: phase3/spoke
         run: terraform init
 
+      # ------------------------------------------------
+      # 8. Terraform Validate
+      # ------------------------------------------------
       - name: Terraform Validate
-        working-directory: phase3/spoke
         run: terraform validate
 
+      # ------------------------------------------------
+      # 9. Terraform Plan
+      # ------------------------------------------------
       - name: Terraform Plan
-        working-directory: phase3/spoke
-        run: terraform plan
+        run: terraform plan -out=tfplan
 
+      # ------------------------------------------------
+      # 10. Terraform Apply
+      # ------------------------------------------------
       - name: Terraform Apply
-        working-directory: phase3/spoke
-        run: terraform apply -auto-approve   
+        run: terraform apply -auto-approve tfplan
+
+      # ------------------------------------------------
+      # 11. Terraform Outputs
+      # ------------------------------------------------
+      - name: Terraform Outputs
+        run: terraform output
