@@ -4,4 +4,4 @@ terraform {
     key    = "phase3/spoke/terraform.tfstate"
     region = "ap-south-1"
   }
-}    
+}      
