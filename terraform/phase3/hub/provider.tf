@@ -9,12 +9,12 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "YOUR-HUB-TERRAFORM-STATE-BUCKET"
+    bucket = "dhoni-demo-terraform-bucket-123456"
     key    = "phase3/hub/terraform.tfstate"
     region = "ap-south-1"
   }
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = var.aws_region  
 } 

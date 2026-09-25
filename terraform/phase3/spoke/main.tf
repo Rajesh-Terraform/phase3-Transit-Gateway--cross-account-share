@@ -48,8 +48,3 @@ module "spoke_vpc_route" {
   destination_cidr    = var.hub_vpc_cidr
   transit_gateway_id = var.transit_gateway_id
 }
-
-
-output "spoke_attachment_id" {
-  value = module.spoke_attachment.attachment_id
-} 
