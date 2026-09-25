@@ -19,32 +19,17 @@ variable "tgw_description" {
 }
 
 variable "amazon_side_asn" {
-  description = "Amazon side ASN"
+  description = "Amazon side ASN for Transit Gateway"
   type        = number
   default     = 64512
 }
 
 variable "ram_share_name" {
-  description = "RAM resource share name"
+  description = "AWS RAM share name"
   type        = string
 }
 
 variable "spoke_account_id" {
-  description = "Spoke AWS account ID"
+  description = "AWS Account ID of spoke account"
   type        = string
-
-  validation {
-    condition     = can(regex("^[0-9]{12}$", var.spoke_account_id))
-    error_message = "spoke_account_id must be exactly 12 digits."
-  }
-}
-
-variable "hub_vpc_id" {
-  description = "Hub VPC ID"
-  type        = string
-}
-
-variable "hub_private_subnet_ids" {
-  description = "Hub private subnet IDs"
-  type        = list(string)
 }   

@@ -1,3 +1,18 @@
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
 module "tgw" {
   source = "../modules/transit-gateway"
 
@@ -9,16 +24,7 @@ module "tgw" {
 module "ram" {
   source = "../modules/ram-share"
 
-  ram_share_name   = var.ram_share_name
-  tgw_arn          = module.tgw.transit_gateway_arn
+  ram_share_name  = var.ram_share_name
+  tgw_arn         = module.tgw.transit_gateway_arn
   spoke_account_id = var.spoke_account_id
-}
-
-module "hub_attachment" {
-  source = "../modules/tgw-attachment"
-
-  transit_gateway_id = module.tgw.transit_gateway_id
-  vpc_id             = var.hub_vpc_id
-  subnet_ids         = var.hub_private_subnet_ids
-  attachment_name    = "${var.project_name}-hub-attachment"
 }  

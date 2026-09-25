@@ -1,6 +1,11 @@
-hub_vpc_id = "vpc-0123456789abcdef0"
+aws_region = "ap-south-1"
 
-hub_private_subnet_ids = [
-  "subnet-0123456789abcdef0",
-  "subnet-0987654321abcdef0"
-]   
+project_name = "hub-spoke-tgw"
+
+tgw_name = "hub-tgw"
+
+tgw_description = "Transit Gateway for hub and spoke VPC connectivity"
+
+ram_share_name = "hub-tgw-share"
+
+spoke_account_id = "123456789012"   
