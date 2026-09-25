@@ -1,5 +1,5 @@
 variable "aws_region" {
-  description = "AWS region for Hub account"
+  description = "AWS region"
   type        = string
 }
 
@@ -21,6 +21,7 @@ variable "tgw_description" {
 variable "amazon_side_asn" {
   description = "Amazon side ASN"
   type        = number
+  default     = 64512
 }
 
 variable "ram_share_name" {
@@ -29,7 +30,7 @@ variable "ram_share_name" {
 }
 
 variable "spoke_account_id" {
-  description = "AWS account ID of Spoke account"
+  description = "Spoke AWS account ID"
   type        = string
 
   validation {
@@ -44,11 +45,6 @@ variable "hub_vpc_id" {
 }
 
 variable "hub_private_subnet_ids" {
-  description = "Private subnet IDs in Hub VPC for TGW attachment"
+  description = "Hub private subnet IDs"
   type        = list(string)
-
-  validation {
-    condition     = length(var.hub_private_subnet_ids) >= 1
-    error_message = "At least one Hub private subnet ID is required."
-  }
-}  
+}   

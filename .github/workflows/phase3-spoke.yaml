@@ -22,6 +22,12 @@ jobs:
 
     env:
       AWS_REGION: ap-south-1
+      TRANSIT_GATEWAY_ID: ${{ secrets.TRANSIT_GATEWAY_ID }}
+      SPOKE_VPC_ID: ${{ secrets.SPOKE_VPC_ID }}
+      SPOKE_PRIVATE_SUBNET_1: ${{ secrets.SPOKE_PRIVATE_SUBNET_1 }}
+      SPOKE_PRIVATE_SUBNET_2: ${{ secrets.SPOKE_PRIVATE_SUBNET_2 }}
+      SPOKE_ROUTE_TABLE_1: ${{ secrets.SPOKE_ROUTE_TABLE_1 }}
+      SPOKE_ROUTE_TABLE_2: ${{ secrets.SPOKE_ROUTE_TABLE_2 }}
 
     defaults:
       run:
@@ -42,7 +48,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::434097521299:role/testingdummy
-          aws-region: ap-south-1
+          aws-region: ${{ env.AWS_REGION }}
 
       # --------------------------------------------------
       # 3. Check AWS identity
@@ -59,36 +65,36 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       # --------------------------------------------------
-      # 5. Check required GitHub variables
+      # 5. Check required variables
       # --------------------------------------------------
       - name: Check required variables
         run: |
-          if [ -z "${{ vars.TRANSIT_GATEWAY_ID }}" ]; then
+          if [ -z "$TRANSIT_GATEWAY_ID" ]; then
             echo "ERROR: TRANSIT_GATEWAY_ID is missing"
             exit 1
           fi
 
-          if [ -z "${{ vars.SPOKE_VPC_ID }}" ]; then
+          if [ -z "$SPOKE_VPC_ID" ]; then
             echo "ERROR: SPOKE_VPC_ID is missing"
             exit 1
           fi
 
-          if [ -z "${{ vars.SPOKE_PRIVATE_SUBNET_1 }}" ]; then
+          if [ -z "$SPOKE_PRIVATE_SUBNET_1" ]; then
             echo "ERROR: SPOKE_PRIVATE_SUBNET_1 is missing"
             exit 1
           fi
 
-          if [ -z "${{ vars.SPOKE_PRIVATE_SUBNET_2 }}" ]; then
+          if [ -z "$SPOKE_PRIVATE_SUBNET_2" ]; then
             echo "ERROR: SPOKE_PRIVATE_SUBNET_2 is missing"
             exit 1
           fi
 
-          if [ -z "${{ vars.SPOKE_ROUTE_TABLE_1 }}" ]; then
+          if [ -z "$SPOKE_ROUTE_TABLE_1" ]; then
             echo "ERROR: SPOKE_ROUTE_TABLE_1 is missing"
             exit 1
           fi
 
-          if [ -z "${{ vars.SPOKE_ROUTE_TABLE_2 }}" ]; then
+          if [ -z "$SPOKE_ROUTE_TABLE_2" ]; then
             echo "ERROR: SPOKE_ROUTE_TABLE_2 is missing"
             exit 1
           fi
@@ -103,18 +109,18 @@ jobs:
           cat > terraform.tfvars <<EOF
           aws_region = "ap-south-1"
 
-          transit_gateway_id = "${{ vars.TRANSIT_GATEWAY_ID }}"
+          transit_gateway_id = "$TRANSIT_GATEWAY_ID"
 
-          spoke_vpc_id = "${{ vars.SPOKE_VPC_ID }}"
+          spoke_vpc_id = "$SPOKE_VPC_ID"
 
           spoke_private_subnet_ids = [
-            "${{ vars.SPOKE_PRIVATE_SUBNET_1 }}",
-            "${{ vars.SPOKE_PRIVATE_SUBNET_2 }}"
+            "$SPOKE_PRIVATE_SUBNET_1",
+            "$SPOKE_PRIVATE_SUBNET_2"
           ]
 
           spoke_route_table_ids = [
-            "${{ vars.SPOKE_ROUTE_TABLE_1 }}",
-            "${{ vars.SPOKE_ROUTE_TABLE_2 }}"
+            "$SPOKE_ROUTE_TABLE_1",
+            "$SPOKE_ROUTE_TABLE_2"
           ]
 
           hub_vpc_cidr = "10.0.0.0/16"
@@ -123,17 +129,18 @@ jobs:
           EOF
 
       # --------------------------------------------------
-      # 7. Show variables
+      # 7. Show terraform.tfvars safely
       # --------------------------------------------------
       - name: Show terraform.tfvars
         run: |
-          cat terraform.tfvars
+          echo "Terraform variables:"
+          sed 's/^transit_gateway_id.*/transit_gateway_id = "***"/' terraform.tfvars
 
       # --------------------------------------------------
       # 8. Terraform Format
       # --------------------------------------------------
       - name: Terraform Format
-        run: terraform fmt 
+        run: terraform fmt -check
 
       # --------------------------------------------------
       # 9. Terraform Init
@@ -151,10 +158,15 @@ jobs:
       # 11. Terraform Plan
       # --------------------------------------------------
       - name: Terraform Plan
-        run: terraform plan -input=false -var-file="terraform.tfvars"
+        run: terraform plan \
+          -input=false \
+          -var-file="terraform.tfvars"
 
       # --------------------------------------------------
       # 12. Terraform Apply
       # --------------------------------------------------
       - name: Terraform Apply
-        run: terraform apply -input=false -auto-approve -var-file="terraform.tfvars"    
+        run: terraform apply \
+          -input=false \
+          -auto-approve \
+          -var-file="terraform.tfvars"     

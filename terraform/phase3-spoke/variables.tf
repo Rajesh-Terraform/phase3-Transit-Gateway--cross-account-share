@@ -1,27 +1,34 @@
 variable "aws_region" {
-  type = string
-}
-
-variable "project_name" {
-  type = string
+  type    = string
+  default = "ap-south-1"
 }
 
 variable "transit_gateway_id" {
-  type = string
+  description = "Existing TGW created in the Hub account"
+  type        = string
 }
 
 variable "spoke_vpc_id" {
-  type = string
+  description = "Spoke VPC ID"
+  type        = string
 }
 
 variable "spoke_private_subnet_ids" {
-  type = list(string)
+  description = "Spoke private subnet IDs"
+  type        = list(string)
 }
 
-variable "hub_cidr" {
-  type = string
+variable "spoke_route_table_ids" {
+  description = "Spoke route table IDs"
+  type        = list(string)
 }
 
-variable "spoke_cidr" {
-  type = string
+variable "hub_vpc_cidr" {
+  type    = string
+  default = "10.0.0.0/16"
+}
+
+variable "spoke_vpc_cidr" {
+  type    = string
+  default = "10.1.0.0/16"
 }   
