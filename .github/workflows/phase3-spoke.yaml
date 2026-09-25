@@ -2,6 +2,11 @@ name: Phase 3 - Spoke TGW Attachment
 
 on:
   workflow_dispatch:
+    inputs:
+      transit_gateway_id:
+        description: "Transit Gateway ID created in Hub account"
+        required: true
+        type: string
 
   push:
     branches:
@@ -15,97 +20,94 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  AWS_REGION: ap-south-1
-  TF_IN_AUTOMATION: true
-
 jobs:
-
   phase3-spoke:
-
     name: Attach Spoke VPC to TGW
-
     runs-on: ubuntu-latest
 
     defaults:
       run:
         working-directory: terraform/phase3-spoke
 
+    env:
+      AWS_REGION: ap-south-1
+      TF_VAR_transit_gateway_id: ${{ inputs.transit_gateway_id }}
+
     steps:
 
       # ------------------------------------------------
-      # Checkout
+      # 1. Checkout
       # ------------------------------------------------
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
       # ------------------------------------------------
-      # Configure AWS
+      # 2. Configure AWS credentials
       # ------------------------------------------------
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::434097521299:role/testingdummy 
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.SPOKE_AWS_ROLE_ARN }}
+          aws-region: ap-south-1
 
       # ------------------------------------------------
-      # Check AWS
+      # 3. Check AWS identity
       # ------------------------------------------------
-
       - name: Check AWS identity
         run: |
           aws sts get-caller-identity
 
       # ------------------------------------------------
-      # Get TGW ID from GitHub Secret
+      # 4. Check TGW ID
       # ------------------------------------------------
-
-      - name: Set Transit Gateway ID
-        run: |
-          if [ -z "${{ secrets.TRANSIT_GATEWAY_ID }}" ]; then
-            echo "ERROR: TRANSIT_GATEWAY_ID secret is missing"
-            exit 1
-          fi
-
-          echo "TRANSIT_GATEWAY_ID=${{ secrets.TRANSIT_GATEWAY_ID }}" >> "$GITHUB_ENV"
-
-      # ------------------------------------------------
-      # Validate TGW ID
-      # ------------------------------------------------
-
       - name: Validate Transit Gateway ID
         run: |
-          if [ -z "$TRANSIT_GATEWAY_ID" ]; then
-            echo "ERROR: TRANSIT_GATEWAY_ID is missing"
+          if [ -z "${TF_VAR_transit_gateway_id}" ]; then
+            echo "ERROR: Transit Gateway ID is missing"
             exit 1
           fi
 
-          echo "Transit Gateway ID is configured"
+          echo "Transit Gateway ID: ${TF_VAR_transit_gateway_id}"
 
       # ------------------------------------------------
-      # Terraform
+      # 5. Terraform version
       # ------------------------------------------------
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      # ------------------------------------------------
+      # 6. Terraform init
+      # ------------------------------------------------
       - name: Terraform Init
-        run: terraform init -input=false
+        run: terraform init
 
+      # ------------------------------------------------
+      # 7. Terraform format
+      # ------------------------------------------------
       - name: Terraform Format 
         run: terraform fmt 
 
+      # ------------------------------------------------
+      # 8. Terraform validate
+      # ------------------------------------------------
       - name: Terraform Validate
         run: terraform validate
 
+      # ------------------------------------------------
+      # 9. Terraform plan
+      # ------------------------------------------------
       - name: Terraform Plan
-        run: terraform plan -input=false -var-file="terraform.tfvars"
-        env:
-          TF_VAR_transit_gateway_id: ${{ secrets.TRANSIT_GATEWAY_ID }}
+        run: |
+          terraform plan \
+            -input=false \
+            -var-file="terraform.tfvars"
 
+      # ------------------------------------------------
+      # 10. Terraform apply
+      # ------------------------------------------------
       - name: Terraform Apply
-        run: terraform apply -input=false -auto-approve -var-file="terraform.tfvars"
-        env:
-          TF_VAR_transit_gateway_id: ${{ secrets.TRANSIT_GATEWAY_ID }}  
+        run: |
+          terraform apply \
+            -input=false \
+            -auto-approve \
+            -var-file="terraform.tfvars"   
