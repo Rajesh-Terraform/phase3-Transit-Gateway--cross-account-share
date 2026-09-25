@@ -101,4 +101,4 @@ jobs:
       # 11. Terraform Outputs
       # ------------------------------------------------
       - name: Terraform Outputs
-        run: terraform output
+        run: terraform output   

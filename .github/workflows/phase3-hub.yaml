@@ -23,7 +23,7 @@ jobs:
 
   terraform:
     name: Deploy Phase 3 Hub
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
 
     steps:
 

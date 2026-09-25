@@ -1,7 +1,7 @@
 module "tgw" {
   source = "../../modules/transit-gateway"
 
-  name           = var.tgw_name
+  name            = var.tgw_name
   amazon_side_asn = var.amazon_side_asn
 
   tags = {
@@ -15,9 +15,9 @@ module "tgw" {
 module "ram" {
   source = "../../modules/ram-share"
 
-  name                    = var.ram_name
-  resource_arn            = module.tgw.transit_gateway_arn
-  spoke_account_id        = var.spoke_account_id
+  name                      = var.ram_name
+  resource_arn              = module.tgw.transit_gateway_arn
+  spoke_account_id          = var.spoke_account_id
   allow_external_principals = var.allow_external_principals
 
   tags = {
@@ -57,25 +57,10 @@ module "hub_route_table" {
 }
 
 
-resource "aws_ec2_transit_gateway_route" "hub_to_spoke" {
-  destination_cidr_block         = var.spoke_vpc_cidr
-  transit_gateway_route_table_id = module.hub_route_table.route_table_id
-  transit_gateway_attachment_id  = module.spoke_attachment_id
-}
-
-
 module "hub_vpc_route" {
   source = "../../modules/vpc-tgw-routes"
 
-  route_table_ids     = var.hub_vpc_route_table_ids
-  destination_cidr    = var.spoke_vpc_cidr
-  transit_gateway_id  = module.tgw.transit_gateway_id
-} 
-
-
-module "spoke_propagation_to_hub" {
-  source = "../../modules/tgw-propagation"
-
-  attachment_id  = var.spoke_attachment_id
-  route_table_id = module.hub_route_table.route_table_id
-} 
+  route_table_ids    = var.hub_vpc_route_table_ids
+  destination_cidr   = var.spoke_vpc_cidr
+  transit_gateway_id = module.tgw.transit_gateway_id
+}  

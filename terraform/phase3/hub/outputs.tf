@@ -1,10 +1,4 @@
-output "propagation_id" {
-  value = aws_ec2_transit_gateway_route_table_propagation.this.id
-}  
-
-
-
-
+  
 output "transit_gateway_id" {
   value = module.tgw.transit_gateway_id
 }
@@ -23,4 +17,4 @@ output "hub_attachment_id" {
 
 output "hub_route_table_id" {
   value = module.hub_route_table.route_table_id
-}
+}  
