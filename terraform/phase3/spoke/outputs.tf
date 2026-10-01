@@ -11,4 +11,4 @@ output "spoke_attachment_arn" {
 output "spoke_tgw_route_table_id" {
   description = "Spoke TGW route table ID"
   value       = module.spoke_route_table.route_table_id
-}  
+}    

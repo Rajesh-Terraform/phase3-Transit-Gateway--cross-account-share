@@ -7,14 +7,8 @@ terraform {
       version = "~> 6.0"
     }
   }
-
-  backend "s3" {
-    bucket = "dhoni-demo-terraform-bucket-123456"
-    key    = "phase3/hub/terraform.tfstate"
-    region = "ap-south-1"
-  }
 }
 
 provider "aws" {
-  region = var.aws_region  
+  region = var.aws_region
 }   

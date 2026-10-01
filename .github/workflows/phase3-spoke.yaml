@@ -95,10 +95,10 @@ jobs:
       # 10. Terraform Apply
       # ------------------------------------------------
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve tfplan  
 
       # ------------------------------------------------
       # 11. Terraform Outputs
       # ------------------------------------------------
       - name: Terraform Outputs
-        run: terraform output   
+        run: terraform output     
