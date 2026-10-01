@@ -1,18 +1,8 @@
-variable "amazon_side_asn" {
-  type    = number
-  default = 64512
-}
+resource "aws_ec2_transit_gateway" "this" {
+  amazon_side_asn = var.amazon_side_asn
 
-variable "ram_name" {
-  type    = string
-  default = "phase3-tgw-share"
-}
-
-variable "spoke_account_id" {
-  type = string
-}
-
-variable "allow_external_principals" {
-  type    = bool
-  default = true
+  tags = {
+    Name  = "phase3-tgw"
+    Phase = "3"
+  }
 }  
