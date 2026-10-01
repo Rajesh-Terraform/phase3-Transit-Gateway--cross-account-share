@@ -1,8 +1,16 @@
-resource "aws_ec2_transit_gateway" "this" {
-  amazon_side_asn = var.amazon_side_asn
+module "tgw" {
+  source = "....modulestgw"
 
-  tags = {
-    Name  = "phase3-tgw"
-    Phase = "3"
-  }
-}  
+  name = var.tgw_name
+}
+
+module "ram" {
+  source = "../../modules_ram_share"
+
+  name         = var.ram_name
+  resource_arn = module.tgw.transit_gateway_arn
+
+  principals = [
+    var.spoke_account_id
+  ]
+} 
