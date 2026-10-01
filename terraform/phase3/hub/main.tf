@@ -1,16 +1,11 @@
 module "tgw" {
-  source = "....modulestgw"
+  source = "../modules/tgw"
 
-  name = var.tgw_name
+  # your TGW variables here
 }
 
 module "ram" {
-  source = "../../modules_ram_share"
+  source = "../modules/ram-share"
 
-  name         = var.ram_name
-  resource_arn = module.tgw.transit_gateway_arn
-
-  principals = [
-    var.spoke_account_id
-  ]
-} 
+  # your RAM variables here
+}   
