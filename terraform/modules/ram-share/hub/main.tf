@@ -1,4 +1,4 @@
-
+```hcl
 module "tgw" {
   source = "../../modules/transit-gateway"
 
