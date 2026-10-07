@@ -38,7 +38,7 @@ jobs:
           aws-region: ap-south-1
 
       - name: Terraform Init
-        run: terraform init -input=false -reconfigure
+        run: terraform init -input=false 
 
       - name: Terraform Validate
         run: terraform validate
