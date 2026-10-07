@@ -29,39 +29,40 @@ jobs:
 
     steps:
 
-      # 1. Checkout repository
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Install Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.8
 
-      # 3. Verify Terraform
       - name: Terraform Version
         run: terraform version
 
-      # 4. Configure AWS
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::434097521299:role/testingdummy 
-          aws-region: ap-south-1
+          role-to-assume: arn:aws:iam::434097521299:role/testingdummy
+          aws-region: ap-south-1 
 
-      # 5. Verify AWS
       - name: Verify AWS identity
         run: aws sts get-caller-identity
 
-      # 6. Terraform Init
-      - name: Terraform Init
-        run: terraform init -input=false 
+      - name: Show Terraform files
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files:"
+          ls -la
+          echo "Terraform directory:"
+          ls -la ../../modules || true
 
-      # 7. Terraform Validate
+      - name: Terraform Init
+        run: terraform init -input=false
+
       - name: Terraform Validate
         run: terraform validate
 
-      # 8. Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -input=false 
+        run: terraform plan -input=false  
