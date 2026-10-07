@@ -1,9 +1,7 @@
-aws_region = "ap-south-1"
+tgw_name = "hub-tgw"
 
-amazon_side_asn = 64512
+ram_name = "hub-tgw-share"
 
-ram_name = "phase3-tgw-share"
+allow_external_principals = true
 
-spoke_account_id = "123456789012"
-
-allow_external_principals = true  
+environment = "dev" 

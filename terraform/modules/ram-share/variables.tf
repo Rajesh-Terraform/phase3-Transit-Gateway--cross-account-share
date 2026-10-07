@@ -1,11 +1,16 @@
 variable "name" {
-  type = string
+  description = "RAM resource share name"
+  type        = string
 }
 
-variable "resource_arn" {
-  type = string
+variable "allow_external_principals" {
+  description = "Allow external AWS accounts"
+  type        = bool
+  default     = true
 }
 
-variable "principal" {
-  type = string
-}    
+variable "tags" {
+  description = "Tags for RAM resource share"
+  type        = map(string)
+  default     = {}
+}  

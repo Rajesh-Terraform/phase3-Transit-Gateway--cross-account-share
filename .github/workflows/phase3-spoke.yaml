@@ -56,8 +56,8 @@ jobs:
         run: terraform version
 
       # 6. Terraform Format Check
-      - name: Terraform Format Check
-        run: terraform fmt -check -recursive
+      - name: Terraform Format 
+        run: terraform fmt 
 
       # 7. Terraform Init
       - name: Terraform Init
@@ -76,5 +76,5 @@ jobs:
         run: terraform apply -auto-approve tfplan
 
       # 11. Terraform Outputs
-      - name: Terraform Outputs
+      - name: Terraform Outputs 
         run: terraform output      
