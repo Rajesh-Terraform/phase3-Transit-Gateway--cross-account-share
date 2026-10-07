@@ -3,14 +3,12 @@ variable "name" {
   type        = string
 }
 
-variable "allow_external_principals" {
-  description = "Allow external AWS accounts"
-  type        = bool
-  default     = true
+variable "resource_arn" {
+  description = "ARN of the Transit Gateway"
+  type        = string
 }
 
-variable "tags" {
-  description = "Tags for RAM resource share"
-  type        = map(string)
-  default     = {}
+variable "principal" {
+  description = "AWS account ID of the spoke account"
+  type        = string
 }  
